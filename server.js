@@ -144,7 +144,8 @@ app.post('/voice/answer', twilioAuth, (req, res) => {
   if (!alarm.active || alarm.id !== alarmId || alarm.index !== index) {
     return sendTwiml(res, '<Response><Hangup/></Response>');
   }
-  const gatherAction = `/voice/key?alarmId=${encodeURIComponent(alarmId)}&index=${index}`;
+  // Ampersands in XML attribute values must be escaped or Twilio returns 12100.
+  const gatherAction = `/voice/key?alarmId=${encodeURIComponent(alarmId)}&amp;index=${index}`;
   sendTwiml(res,
     `<Response><Gather input="dtmf" numDigits="1" timeout="${RESET_TIMEOUT_SECONDS}" action="${gatherAction}" method="POST"><Say language="nl-NL">Alarm. Druk binnen 45 seconden op nul om het alarm te bevestigen en te resetten.</Say></Gather><Say language="nl-NL">Geen reset ontvangen. We bellen de volgende contactpersoon.</Say><Hangup/></Response>`
   );
