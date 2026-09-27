@@ -26,7 +26,11 @@ const numbers = [
 ];
 const RESET_TIMEOUT_SECONDS = 45;
 const RING_TIMEOUT_SECONDS = 30;
-const client = twilio(TWILIO_API_KEY, TWILIO_API_SECRET, { accountSid: TWILIO_ACCOUNT_SID });
+// Gebruik API key-authenticatie standaard. Zet TWILIO_AUTH_MODE=account op Render
+// om te testen met Account SID + Auth Token als de API key wordt geweigerd.
+const client = process.env.TWILIO_AUTH_MODE === 'account'
+  ? twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+  : twilio(TWILIO_API_KEY, TWILIO_API_SECRET, { accountSid: TWILIO_ACCOUNT_SID });
 
 let alarm = { active: false, id: null, index: -1, callSid: null, revision: 0 };
 let advancing = false;
@@ -77,7 +81,12 @@ async function startNextCall(alarmId) {
       });
       if (alarm.active && alarm.id === alarmId && alarm.index === index) alarm.callSid = call.sid;
     } catch (err) {
-      console.error(`Bellen naar positie ${index + 1} mislukt:`, err.message);
+      console.error(`Bellen naar positie ${index + 1} mislukt:`, {
+        message: err.message,
+        code: err.code,
+        status: err.status,
+        moreInfo: err.moreInfo
+      });
       if (alarm.active && alarm.id === alarmId && alarm.index === index) {
         alarm.index = index - 1;
         setTimeout(() => startNextCall(alarmId), 1000);
