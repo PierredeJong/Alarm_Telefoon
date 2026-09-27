@@ -162,6 +162,7 @@ app.post('/voice/status', twilioAuth, (req, res) => {
 const port = Number(process.env.PORT || 3000);
 app.listen(port, () => {
   console.log(`Alarmserver luistert op poort ${port}`);
+  console.log(`Twilio-authmodus: ${process.env.TWILIO_AUTH_MODE === 'account' ? 'account' : 'api-key'}`);
   if (!BASE_URL || !DEVICE_TOKEN || !TWILIO_ACCOUNT_SID || !TWILIO_API_KEY ||
       !TWILIO_API_SECRET || !TWILIO_FROM_NUMBER || !TWILIO_AUTH_TOKEN) {
     console.warn('Vul alle vereiste omgevingsvariabelen in voor gebruik.');
