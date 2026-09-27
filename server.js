@@ -47,7 +47,17 @@ function deviceAuth(req, res, next) {
 function twilioAuth(req, res, next) {
   const signature = req.get('X-Twilio-Signature') || '';
   const url = `${BASE_URL}${req.originalUrl}`;
-  if (!TWILIO_AUTH_TOKEN || !twilio.validateRequest(TWILIO_AUTH_TOKEN, signature, url, req.body)) {
+  const valid = Boolean(TWILIO_AUTH_TOKEN) && twilio.validateRequest(TWILIO_AUTH_TOKEN, signature, url, req.body);
+  if (!valid) {
+    // Never log secrets or the signature. These fields help diagnose a Twilio 403.
+    console.error('Twilio-webhook afgewezen:', {
+      method: req.method,
+      path: req.originalUrl,
+      configuredBaseUrl: BASE_URL || '(ontbreekt)',
+      requestHost: req.get('host'),
+      hasSignature: Boolean(signature),
+      hasAuthToken: Boolean(TWILIO_AUTH_TOKEN)
+    });
     return res.status(403).send('Invalid Twilio signature');
   }
   next();
