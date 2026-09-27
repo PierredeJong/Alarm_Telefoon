@@ -147,7 +147,7 @@ app.post('/voice/answer', twilioAuth, (req, res) => {
   // Ampersands in XML attribute values must be escaped or Twilio returns 12100.
   const gatherAction = `/voice/key?alarmId=${encodeURIComponent(alarmId)}&amp;index=${index}`;
   sendTwiml(res,
-    `<Response><Gather input="dtmf" numDigits="1" timeout="${RESET_TIMEOUT_SECONDS}" action="${gatherAction}" method="POST"><Say language="nl-NL">Alarm. Druk binnen 45 seconden op nul om het alarm te bevestigen en te resetten.</Say></Gather><Say language="nl-NL">Geen reset ontvangen. We bellen de volgende contactpersoon.</Say><Hangup/></Response>`
+    `<Response><Gather input="dtmf" numDigits="1" timeout="${RESET_TIMEOUT_SECONDS}" action="${gatherAction}" method="POST"><Say language="nl-NL">Alarm bij familie de Jong. Druk binnen 45 seconden op nul om het alarm te bevestigen en te resetten.</Say></Gather><Say language="nl-NL">Geen reset ontvangen. We bellen de volgende contactpersoon.</Say><Hangup/></Response>`
   );
 });
 
@@ -157,7 +157,7 @@ app.post('/voice/key', twilioAuth, (req, res) => {
   const digit = String(req.body.Digits || '');
   if (digit === '0' && alarm.active && alarm.id === alarmId && alarm.index === index) {
     resetAlarm(false);
-    return sendTwiml(res, '<Response><Say language="nl-NL">Alarm gereset. Bedankt.</Say><Hangup/></Response>');
+    return sendTwiml(res, '<Response><Say language="nl-NL">Het alarm is gereset. Bedankt.</Say><Hangup/></Response>');
   }
   sendTwiml(res, '<Response><Say language="nl-NL">Geen geldige reset ontvangen.</Say><Hangup/></Response>');
 });
