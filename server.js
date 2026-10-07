@@ -24,15 +24,32 @@ const numbers = [
   '+31654308997',
   '+31651515353'
 ];
+
+// --- VERSCHILLENDE TEKSTEN OP BASIS VAN EEN ID ---
+const MESSAGES = {
+  "1": "Inbraakalarm bij familie de Jong sensor woonkamer.",
+  "2": "Inbraakalarm bij familie de Jong sensor kantoor.",
+  "3": "Inbraak alarm bij familie de Jong sensor hal.",
+  "4": "Inbraak alarm bij familie de Jong sensor bijkeuken.",
+  "5": "Inbraak alarm bij familie de Jong schuifdeur woonkamer.",
+  "6": "Inbraak alarm bij familie de Jong buitendeur bijkeuken.",
+  "7": "Inbraak alarm bij familie de Jong sabotage behuizing alarmunit.",
+  "8": "Inbraak alarm bij familie de Jong sabotage sensor woonkamer.",
+  "9": "Inbraak alarm bij familie de Jong sabotage sensor kantoor.",
+  "10": "Inbraak alarm bij familie de Jong sabotage sensor hal.",
+  "11": "Inbraak alarm bij familie de Jong sabotage sensor bijkeuken.",
+  "default": "Alarm bij familie de Jong."
+};
+
 const RESET_TIMEOUT_SECONDS = 45;
 const RING_TIMEOUT_SECONDS = 30;
-// Gebruik API key-authenticatie standaard. Zet TWILIO_AUTH_MODE=account op Render
-// om te testen met Account SID + Auth Token als de API key wordt geweigerd.
+
 const client = process.env.TWILIO_AUTH_MODE === 'account'
   ? twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
   : twilio(TWILIO_API_KEY, TWILIO_API_SECRET, { accountSid: TWILIO_ACCOUNT_SID });
 
-let alarm = { active: false, id: null, index: -1, callSid: null, revision: 0 };
+// Het alarm-object houdt nu ook de actieve spraaktekst bij
+let alarm = { active: false, id: null, index: -1, callSid: null, revision: 0, text: "" };
 let advancing = false;
 
 function deviceAuth(req, res, next) {
@@ -49,7 +66,6 @@ function twilioAuth(req, res, next) {
   const url = `${BASE_URL}${req.originalUrl}`;
   const valid = Boolean(TWILIO_AUTH_TOKEN) && twilio.validateRequest(TWILIO_AUTH_TOKEN, signature, url, req.body);
   if (!valid) {
-    // Never log secrets or the signature. These fields help diagnose a Twilio 403.
     console.error('Twilio-webhook afgewezen:', {
       method: req.method,
       path: req.originalUrl,
@@ -74,7 +90,6 @@ async function startNextCall(alarmId) {
   try {
     const nextIndex = alarm.index + 1;
     if (nextIndex >= numbers.length) {
-      // Na vijf nummers opnieuw bij nummer 1 beginnen zolang het alarm actief is.
       alarm.index = -1;
     }
     const index = alarm.index + 1;
@@ -114,16 +129,35 @@ function resetAlarm(stopCurrentCall = true) {
   const oldCallSid = alarm.callSid;
   alarm.active = false;
   alarm.callSid = null;
+  alarm.text = ""; // Reset de tekst
   alarm.revision++;
   if (stopCurrentCall && oldCallSid) client.calls(oldCallSid).update({ status: 'completed' }).catch(() => {});
 }
 
 app.get('/', (_req, res) => res.type('text').send('ESP32 Twilio alarm server is running'));
 
+// --- GEWIJZIGDE ENDPOINT: ACCEPTEERT NU textId OF customText ---
 app.post('/alarm', deviceAuth, async (req, res) => {
   if (req.body.active !== true) return res.status(400).json({ error: 'active must be true' });
   if (alarm.active) return res.json({ active: true, alarmId: alarm.id });
-  alarm = { active: true, id: crypto.randomUUID(), index: -1, callSid: null, revision: alarm.revision + 1 };
+
+  // Bepaal welke tekst moet worden uitgesproken
+  let activeText = MESSAGES["default"];
+  if (req.body.customText) {
+    activeText = req.body.customText; // Directe opgestuurde tekst heeft prioriteit
+  } else if (req.body.textId && MESSAGES[req.body.textId]) {
+    activeText = MESSAGES[req.body.textId]; // Selecteer tekst op basis van ID
+  }
+
+  alarm = { 
+    active: true, 
+    id: crypto.randomUUID(), 
+    index: -1, 
+    callSid: null, 
+    revision: alarm.revision + 1,
+    text: activeText // Sla de geselecteerde tekst op in de actieve sessie
+  };
+
   const id = alarm.id;
   res.json({ active: true, alarmId: id });
   startNextCall(id);
@@ -138,16 +172,19 @@ app.get('/status', deviceAuth, (_req, res) => {
   res.json({ active: alarm.active, alarmId: alarm.id, revision: alarm.revision });
 });
 
+// --- GEWIJZIGDE ENDPOINT: GEBRUIKT DYNAMISCHE TEKST ---
 app.post('/voice/answer', twilioAuth, (req, res) => {
   const alarmId = String(req.query.alarmId || '');
   const index = Number(req.query.index);
   if (!alarm.active || alarm.id !== alarmId || alarm.index !== index) {
     return sendTwiml(res, '<Response><Hangup/></Response>');
   }
-  // Ampersands in XML attribute values must be escaped or Twilio returns 12100.
+
   const gatherAction = `/voice/key?alarmId=${encodeURIComponent(alarmId)}&amp;index=${index}`;
+  
+  // Gebruik de dynamisch opgeslagen tekst (alarm.text) in de <Say> tag
   sendTwiml(res,
-    `<Response><Gather input="dtmf" numDigits="1" timeout="${RESET_TIMEOUT_SECONDS}" action="${gatherAction}" method="POST"><Say language="nl-NL">Alarm bij familie de Jong. Druk binnen 45 seconden op nul om het alarm te bevestigen en te resetten.</Say></Gather><Say language="nl-NL">Geen reset ontvangen. We bellen de volgende contactpersoon.</Say><Hangup/></Response>`
+    `<Response><Gather input="dtmf" numDigits="1" timeout="${RESET_TIMEOUT_SECONDS}" action="${gatherAction}" method="POST"><Say language="nl-NL">${alarm.text} Druk binnen 45 seconden op nul om het alarm te bevestigen en te resetten.</Say></Gather><Say language="nl-NL">Geen reset ontvangen. We bellen de volgende contactpersoon.</Say><Hangup/></Response>`
   );
 });
 
