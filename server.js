@@ -27,17 +27,18 @@ const numbers = [
 
 // --- VERSCHILLENDE TEKSTEN OP BASIS VAN EEN ID ---
 const MESSAGES = {
-  "1": "Inbraakalarm bij familie de Jong sensor woonkamer.",
-  "2": "Inbraakalarm bij familie de Jong sensor kantoor.",
-  "3": "Inbraak alarm bij familie de Jong sensor hal.",
-  "4": "Inbraak alarm bij familie de Jong sensor bijkeuken.",
-  "5": "Inbraak alarm bij familie de Jong schuifdeur woonkamer.",
-  "6": "Inbraak alarm bij familie de Jong buitendeur bijkeuken.",
-  "7": "Inbraak alarm bij familie de Jong sabotage behuizing alarmunit.",
-  "8": "Inbraak alarm bij familie de Jong sabotage sensor woonkamer.",
-  "9": "Inbraak alarm bij familie de Jong sabotage sensor kantoor.",
-  "10": "Inbraak alarm bij familie de Jong sabotage sensor hal.",
-  "11": "Inbraak alarm bij familie de Jong sabotage sensor bijkeuken.",
+  "1": "Inbraakalarm bij familie de Jong",
+  "2": "Inbraakalarm bij familie de Jong sensor woonkamer.",
+  "3": "Inbraakalarm bij familie de Jong sensor kantoor.",
+  "4": "Inbraak alarm bij familie de Jong sensor hal.",
+  "5": "Inbraak alarm bij familie de Jong sensor bijkeuken.",
+  "6": "Inbraak alarm bij familie de Jong schuifdeur woonkamer.",
+  "7": "Inbraak alarm bij familie de Jong buitendeur bijkeuken.",
+  "8": "Inbraak alarm bij familie de Jong sabotage behuizing alarmunit.",
+  "9": "Inbraak alarm bij familie de Jong sabotage sensor woonkamer.",
+  "10": "Inbraak alarm bij familie de Jong sabotage sensor kantoor.",
+  "11": "Inbraak alarm bij familie de Jong sabotage sensor hal.",
+  "12": "Inbraak alarm bij familie de Jong sabotage sensor bijkeuken.",
   "default": "Alarm bij familie de Jong."
 };
 
