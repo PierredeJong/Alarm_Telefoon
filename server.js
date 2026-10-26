@@ -38,11 +38,11 @@ const MESSAGES = {
   "9": "Inbraak alarm bij familie de Jong Sabotage PIR sensor bijkeuken.",
   "10": "Inbraak alarm bij familie de Jong Magneet kontakt schuifdeur woonkamer.",
   "11": "Inbraak alarm bij familie de Jong Magneet kontakt buitendeur bijkeuken.",
-  "12": "Inbraak alarm bij familie de Jong Voedings spanning 230 volt niet meer aanwezig.",
-  "13": "Inbraak alarm bij familie de Jong Batterij spanning accu te laag.",
+  "12": "Inbraak alarm bij familie de Jong Magneet kontakt uitzetraam bijkeuken.",
+  "13": "Inbraak alarm bij familie de Jong Magneet kontakt uitzetraam slaapkamer.",
   "14": "Inbraak alarm bij familie de Jong Reserve.",
-  "15": "Inbraak alarm bij familie de Jong Reserve.",
-  "16": "Inbraak alarm bij familie de Jong Reserve.",
+  "15": "Inbraak alarm bij familie de Jong Voedings spanning 230 volt niet meer aanwezig.",
+  "16": "Inbraak alarm bij familie de Jong Batterij spanning accu te laag.",
   "17": "Inbraak alarm bij familie de Jong Onbekende melding.",
   "default": "Alarm bij familie de Jong Onbekende melding."
 };
