@@ -27,19 +27,24 @@ const numbers = [
 
 // --- VERSCHILLENDE TEKSTEN OP BASIS VAN EEN ID ---
 const MESSAGES = {
-  "1": "Inbraakalarm bij familie de Jong",
-  "2": "Inbraakalarm bij familie de Jong sensor woonkamer.",
-  "3": "Inbraakalarm bij familie de Jong sensor kantoor.",
-  "4": "Inbraak alarm bij familie de Jong sensor hal.",
-  "5": "Inbraak alarm bij familie de Jong sensor bijkeuken.",
-  "6": "Inbraak alarm bij familie de Jong schuifdeur woonkamer.",
-  "7": "Inbraak alarm bij familie de Jong buitendeur bijkeuken.",
-  "8": "Inbraak alarm bij familie de Jong sabotage behuizing alarmunit.",
-  "9": "Inbraak alarm bij familie de Jong sabotage sensor woonkamer.",
-  "10": "Inbraak alarm bij familie de Jong sabotage sensor kantoor.",
-  "11": "Inbraak alarm bij familie de Jong sabotage sensor hal.",
-  "12": "Inbraak alarm bij familie de Jong sabotage sensor bijkeuken.",
-  "default": "Alarm bij familie de Jong."
+  "1": "Inbraakalarm bij familie de Jong Sabotage behuizing alarm systeem.",
+  "2": "Inbraakalarm bij familie de Jong PIR sensor woonkamer.",
+  "3": "Inbraakalarm bij familie de Jong Sabotage PIR sensor woonkamer.",
+  "4": "Inbraak alarm bij familie de Jong PIR sensor kantoor.",
+  "5": "Inbraak alarm bij familie de Jong Sabotage PIR sensor kantoor.",
+  "6": "Inbraak alarm bij familie de Jong PIR sensor hal.",
+  "7": "Inbraak alarm bij familie de Jong Sabotage PIR sensor hal",
+  "8": "Inbraak alarm bij familie de Jong PIR sensor bijkeuken.",
+  "9": "Inbraak alarm bij familie de Jong Sabotage PIR sensor bijkeuken.",
+  "10": "Inbraak alarm bij familie de Jong Magneet kontakt schuifdeur woonkamer.",
+  "11": "Inbraak alarm bij familie de Jong Magneet kontakt buitendeur bijkeuken.",
+  "12": "Inbraak alarm bij familie de Jong Voedings spanning 230 volt niet meer aanwezig.",
+  "13": "Inbraak alarm bij familie de Jong Batterij spanning accu te laag.",
+  "14": "Inbraak alarm bij familie de Jong Reserve,
+  "15": "Inbraak alarm bij familie de Jong Reserve.
+  "16": "Inbraak alarm bij familie de Jong Reserve,
+  "17": "Inbraak alarm bij familie de Jong Onbekende melding,
+  "default": "Alarm bij familie de Jong Onbekende melding."
 };
 
 const RESET_TIMEOUT_SECONDS = 45;
