@@ -41,7 +41,7 @@ const MESSAGES = {
   "12": "Inbraak alarm bij familie de Jong Voedings spanning 230 volt niet meer aanwezig.",
   "13": "Inbraak alarm bij familie de Jong Batterij spanning accu te laag.",
   "14": "Inbraak alarm bij familie de Jong Reserve,
-  "15": "Inbraak alarm bij familie de Jong Reserve.
+  "15": "Inbraak alarm bij familie de Jong Reserve,
   "16": "Inbraak alarm bij familie de Jong Reserve,
   "17": "Inbraak alarm bij familie de Jong Onbekende melding,
   "default": "Alarm bij familie de Jong Onbekende melding."
